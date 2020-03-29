@@ -3,22 +3,23 @@ import './App.css';
 import ToDoTasks from './components/ToDoTasks';
 import ToDoInput from './components/ToDoInput';
 import SweetAlert from 'react-bootstrap-sweetalert';
+import uuid from 'react-uuid';
 
 class App extends Component {
 	state = {
 		toDoTasks: [
 			{
-				id: 1,
+				id: uuid(),
 				task: 'Create a new folder',
 				completed: false
 			},
 			{
-				id: 2,
+				id: uuid(),
 				task: 'Clone the project in to the folder',
 				completed: false
 			},
 			{
-				id: 3,
+				id: uuid(),
 				task: 'Edit app.js file to display data',
 				completed: false
 			}
@@ -26,18 +27,23 @@ class App extends Component {
 		toDoInput: '',
 		toDoUpdateId: -1,
 		toDoDeleteId: -1,
+		showUpdateAlert: false,
 		showDeleteAlert: false
 	};
 
 	// Toggle completed
 	markComplete = id => {
+
+		const checkedTask = this.state.toDoTasks.find(
+			toDoTask => toDoTask.id === id
+		);
+
+		checkedTask.completed = !checkedTask.completed;
+
 		this.setState({
-			toDoTasks: this.state.toDoTasks.map(toDoTask => {
-				if (toDoTask.id === id) {
-					toDoTask.completed = !toDoTask.completed;
-				}
-				return toDoTask;
-			})
+			toDoTasks: [
+				...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id), checkedTask
+			]
 		});
 	};
 
@@ -50,25 +56,12 @@ class App extends Component {
 
 	// Delete task
 	deleteTask = () => {
-		let mutex = 'NotFound';
-		let newToDoTasks = [];
-
-		// Re Arrange IDs
-		this.state.toDoTasks.forEach(toDoTask => {
-			if (this.state.toDoDeleteId === toDoTask.id) {
-				mutex = 'Found';
-				return;
-			}
-			if (mutex === 'NotFound') {
-				newToDoTasks.push(toDoTask);
-			} else {
-				const { id, task, completed } = toDoTask;
-				newToDoTasks.push({ id: id - 1, task, completed });
-			}
-		});
-
 		this.setState({
-			toDoTasks: newToDoTasks,
+			toDoTasks: [
+				...this.state.toDoTasks.filter(
+					toDoTask => toDoTask.id !== this.state.toDoDeleteId
+				)
+			],
 			toDoDeleteId: -1,
 			showDeleteAlert: false
 		});
@@ -80,13 +73,13 @@ class App extends Component {
 			let newToDoTask = {};
 			if (id === -1) {
 				newToDoTask = {
-					id: this.state.toDoTasks.length + 1,
+					id: uuid(),
 					task,
 					completed: false
 				};
 
 				this.setState({
-					toDoTasks: [...this.state.toDoTasks, newToDoTask]
+					toDoTasks: [newToDoTask, ...this.state.toDoTasks]
 				});
 			} else {
 				newToDoTask = {
@@ -108,6 +101,14 @@ class App extends Component {
 
 	// Update
 	updateTaskHandler = id => {
+		if (
+			this.state.toDoTasks.find(toDoTask => toDoTask.id === id).completed
+		) {
+			this.setState({
+				showUpdateAlert: true
+			});
+		}
+
 		this.setState({
 			toDoInput: this.state.toDoTasks.find(toDoTask => toDoTask.id === id)
 				.task,
@@ -152,7 +153,18 @@ class App extends Component {
 							this.setState({ showDeleteAlert: false });
 						}}
 					>
-						You will not be able to recover this imaginary file!
+						You will not be able to recover this action!
+					</SweetAlert>
+				) : null}
+
+				{this.state.showUpdateAlert ? (
+					<SweetAlert
+						title='This task has already completed!'
+						onConfirm={() => {
+							this.setState({ showUpdateAlert: false });
+						}}
+					>
+						You can't update completed tasks
 					</SweetAlert>
 				) : null}
 			</div>
