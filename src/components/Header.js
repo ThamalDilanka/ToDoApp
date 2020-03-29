@@ -5,7 +5,7 @@ class Header extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<div className='todo-header position-relative overflow-hidden  text-center bg-warning'>
+				<div className='todo-header position-relative overflow-hidden  text-center bg-light'>
 					<div className='col-md-5 p-lg-5 mx-auto my-5'>
 						<h1 className='display-4 font-weight-normal'>
 							To-Do App
