@@ -1,7 +1,7 @@
 .todo-header {
 	background-image: url(../assets/background.jpg);
 	background-position: center;
-	background-size: cover;
+	background-size: auto;
 }
 
 .place-holder-container {
