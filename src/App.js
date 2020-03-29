@@ -40,11 +40,18 @@ class App extends Component {
 
 		checkedTask.completed = !checkedTask.completed;
 
-		this.setState({
-			toDoTasks: [
-				...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id), checkedTask
-			]
-		});
+		if(checkedTask.completed) {
+			this.setState({
+				toDoTasks: [
+					...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id), checkedTask
+				]
+			});
+		} else {
+			this.setState({
+				toDoTasks: [checkedTask, ...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id)]
+			})
+		}
+
 	};
 
 	confirmDelete = id => {
