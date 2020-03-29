@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PlusCircle } from 'react-bootstrap-icons';
 
 class ToDoInput extends Component {
+	
 	onChange = e => this.props.onChange(e);
 	onSubmit = e => this.props.onSubmit(e);
 

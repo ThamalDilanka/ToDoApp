@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ToDoTasks from './components/ToDoTasks';
 import ToDoInput from './components/ToDoInput';
+import SweetAlert from 'react-bootstrap-sweetalert';
 
 class App extends Component {
 	state = {
@@ -23,7 +24,9 @@ class App extends Component {
 			}
 		],
 		toDoInput: '',
-		toDoUpdateId: -1
+		toDoUpdateId: -1,
+		toDoDeleteId: -1,
+		showDeleteAlert: false
 	};
 
 	// Toggle completed
@@ -38,14 +41,21 @@ class App extends Component {
 		});
 	};
 
+	confirmDelete = id => {
+		this.setState({
+			showDeleteAlert: true,
+			toDoDeleteId: id
+		});
+	};
+
 	// Delete task
-	deleteTask = id => {
+	deleteTask = () => {
 		let mutex = 'NotFound';
 		let newToDoTasks = [];
 
 		// Re Arrange IDs
 		this.state.toDoTasks.forEach(toDoTask => {
-			if (id === toDoTask.id) {
+			if (this.state.toDoDeleteId === toDoTask.id) {
 				mutex = 'Found';
 				return;
 			}
@@ -58,7 +68,9 @@ class App extends Component {
 		});
 
 		this.setState({
-			toDoTasks: newToDoTasks
+			toDoTasks: newToDoTasks,
+			toDoDeleteId: -1,
+			showDeleteAlert: false
 		});
 	};
 
@@ -84,11 +96,12 @@ class App extends Component {
 						toDoTask => toDoTask.id === id
 					).completed
 				};
-		
+
 				this.setState({
-					toDoTasks: this.state.toDoTasks.map( task => task.id === id ? newToDoTask : task)
-				})
-		
+					toDoTasks: this.state.toDoTasks.map(task =>
+						task.id === id ? newToDoTask : task
+					)
+				});
 			}
 		}
 	};
@@ -122,9 +135,26 @@ class App extends Component {
 				<ToDoTasks
 					toDoTasks={this.state.toDoTasks}
 					markComplete={this.markComplete}
-					deleteTask={this.deleteTask}
+					deleteTask={this.confirmDelete}
 					updateTask={this.updateTaskHandler}
 				/>
+
+				{this.state.showDeleteAlert ? (
+					<SweetAlert
+						warning
+						showCancel
+						confirmBtnText='Yes, delete it!'
+						confirmBtnBsStyle='danger'
+						cancelBtnBsStyle='default'
+						title='Are you sure?'
+						onConfirm={this.deleteTask}
+						onCancel={() => {
+							this.setState({ showDeleteAlert: false });
+						}}
+					>
+						You will not be able to recover this imaginary file!
+					</SweetAlert>
+				) : null}
 			</div>
 		);
 	}
