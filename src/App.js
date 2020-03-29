@@ -3,35 +3,20 @@ import './App.css';
 import ToDoTasks from './components/ToDoTasks';
 import ToDoInput from './components/ToDoInput';
 import Header from './components/Header';
+import PlaceHolder from './components/PlaceHolder';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import uuid from 'react-uuid';
 
 class App extends Component {
 	state = {
-		toDoTasks: [
-			{
-				id: uuid(),
-				task: 'Create a new folder',
-				completed: false
-			},
-			{
-				id: uuid(),
-				task: 'Clone the project in to the folder',
-				completed: false
-			},
-			{
-				id: uuid(),
-				task: 'Edit app.js file to display data',
-				completed: false
-			}
-		],
+		toDoTasks: [],
 		toDoInput: '',
 		toDoUpdateId: -1,
 		toDoDeleteId: -1,
 		showDeleteAlert: false
 	};
 
-	// Toggle completed
+	// Toggle completed and rearrange the array
 	markComplete = id => {
 		const checkedTask = this.state.toDoTasks.find(
 			toDoTask => toDoTask.id === id
@@ -60,6 +45,7 @@ class App extends Component {
 		}
 	};
 
+	// Prompt alert to confirm deletion
 	confirmDelete = id => {
 		this.setState({
 			showDeleteAlert: true,
@@ -67,7 +53,7 @@ class App extends Component {
 		});
 	};
 
-	// Delete task
+	// Deleting a task
 	deleteTask = () => {
 		this.setState({
 			toDoTasks: [
@@ -80,7 +66,7 @@ class App extends Component {
 		});
 	};
 
-	// Add todo task
+	// Add or Update a todo task
 	addToDoTask = (id, task) => {
 		if (task !== '') {
 			let newToDoTask = {};
@@ -112,7 +98,7 @@ class App extends Component {
 		}
 	};
 
-	// Update
+	// Call the update method
 	updateTaskHandler = id => {
 		this.setState({
 			toDoInput: this.state.toDoTasks.find(toDoTask => toDoTask.id === id)
@@ -121,14 +107,17 @@ class App extends Component {
 		});
 	};
 
+	// Onchange event handler of the input field
 	onChangeHandler = e => this.setState({ toDoInput: e.target.value });
 
+	// OnSubmit event handler of input form
 	onSubmitHandler = e => {
 		e.preventDefault();
 		this.addToDoTask(this.state.toDoUpdateId, this.state.toDoInput);
 		this.setState({ toDoInput: '', toDoUpdateId: -1 });
 	};
 
+	// Reset state when cancel the updating process
 	onResetTaskHandler = () => {
 		console.log('object');
 		this.setState({
@@ -141,6 +130,7 @@ class App extends Component {
 		return (
 			<div>
 				<Header />
+
 				<div className='container mt-5'>
 					<ToDoInput
 						addToDoTask={this.addToDoTask}
@@ -149,14 +139,19 @@ class App extends Component {
 						onChange={this.onChangeHandler}
 						toDoUpdateId={this.state.toDoUpdateId}
 					/>
-					<ToDoTasks
-						toDoTasks={this.state.toDoTasks}
-						markComplete={this.markComplete}
-						deleteTask={this.confirmDelete}
-						updateTask={this.updateTaskHandler}
-						toDoUpdateId={this.state.toDoUpdateId}
-						onResetTask={this.onResetTaskHandler}
-					/>
+
+					{this.state.toDoTasks.length === 0 ? (
+						<PlaceHolder />
+					) : (
+						<ToDoTasks
+							toDoTasks={this.state.toDoTasks}
+							markComplete={this.markComplete}
+							deleteTask={this.confirmDelete}
+							updateTask={this.updateTaskHandler}
+							toDoUpdateId={this.state.toDoUpdateId}
+							onResetTask={this.onResetTaskHandler}
+						/>
+					)}
 
 					{this.state.showDeleteAlert ? (
 						<SweetAlert

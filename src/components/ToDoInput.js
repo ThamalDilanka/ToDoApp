@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
-import { PlusCircle, Bookmark } from 'react-bootstrap-icons';
-
+import { Plus, Bookmark } from 'react-bootstrap-icons';
 
 class ToDoInput extends Component {
-	
 	onChange = e => this.props.onChange(e);
 	onSubmit = e => this.props.onSubmit(e);
 
 	render() {
 		return (
 			<form onSubmit={this.onSubmit}>
-				<div className='input-group mb-3'>
+				<div className='input-group mb-5'>
 					<input
 						type='text'
 						className='form-control'
@@ -23,10 +21,11 @@ class ToDoInput extends Component {
 							className='btn btn-outline-primary'
 							type='submit'
 						>
-							{
-								this.props.toDoUpdateId === -1 ? <PlusCircle /> : <Bookmark />
-							}
-							
+							{this.props.toDoUpdateId === -1 ? (
+								<Plus />
+							) : (
+								<Bookmark />
+							)}
 						</button>
 					</div>
 				</div>

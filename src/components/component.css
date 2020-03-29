@@ -1,0 +1,11 @@
+.todo-header {
+	background-image: url(../assets/background.jpg);
+	background-position: center;
+	background-size: cover;
+}
+
+.place-holder-container {
+	background-image: url(../assets/placeholder.jpg);
+	background-position: center;
+	background-size: cover;
+}

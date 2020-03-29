@@ -22,21 +22,26 @@ class ToDoTask extends Component {
 		const { id, task } = this.props.toDoTask;
 		return (
 			<React.Fragment>
-				<tr className="d-flex">
-					<td className="col-1">
+				<tr className='d-flex'>
+					<td className='col-1'>
 						<FormControlLabel
 							control={
 								<Checkbox
-								checked={this.props.toDoTask.completed}
-								onChange={this.props.markComplete.bind(this, id)}
-								name="checkedB"
-								color="primary"
-							  />
+									checked={this.props.toDoTask.completed}
+									onChange={this.props.markComplete.bind(
+										this,
+										id
+									)}
+									name='checkedB'
+									color='primary'
+								/>
 							}
 						/>
 					</td>
-					<td className="col-8" style={this.getStyle()}>{task}</td>
-					<td className="col-3 text-right">
+					<td className='col-8' style={this.getStyle()}>
+						{task}
+					</td>
+					<td className='col-3 text-right'>
 						<div
 							className='btn-group btn-group-sm'
 							role='group'
@@ -52,7 +57,7 @@ class ToDoTask extends Component {
 										id
 									)}
 								>
-									<Pencil color='green' size={12} />
+									<Pencil size={12} />
 								</button>
 							) : this.props.toDoUpdateId !==
 							  this.props.toDoTask.id ? (
@@ -64,7 +69,7 @@ class ToDoTask extends Component {
 										id
 									)}
 								>
-									<Pencil color='green' size={12} />
+									<Pencil size={12} />
 								</button>
 							) : (
 								<button
@@ -72,10 +77,7 @@ class ToDoTask extends Component {
 									className='btn btn-outline-info'
 									onClick={this.props.onResetTask}
 								>
-									<ArrowCounterclockwise
-										color='green'
-										size={12}
-									/>
+									<ArrowCounterclockwise size={12} />
 								</button>
 							)}
 
@@ -84,7 +86,7 @@ class ToDoTask extends Component {
 								className='btn btn-outline-danger'
 								onClick={this.props.deleteTask.bind(this, id)}
 							>
-								<Trash color='red' size={12} />
+								<Trash size={12} />
 							</button>
 						</div>
 					</td>
