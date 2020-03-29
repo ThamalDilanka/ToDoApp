@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ToDoTasks from './components/ToDoTasks';
 import ToDoInput from './components/ToDoInput';
+import Header from './components/Header';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import uuid from 'react-uuid';
 
@@ -27,31 +28,36 @@ class App extends Component {
 		toDoInput: '',
 		toDoUpdateId: -1,
 		toDoDeleteId: -1,
-		showUpdateAlert: false,
 		showDeleteAlert: false
 	};
 
 	// Toggle completed
 	markComplete = id => {
-
 		const checkedTask = this.state.toDoTasks.find(
 			toDoTask => toDoTask.id === id
 		);
 
 		checkedTask.completed = !checkedTask.completed;
 
-		if(checkedTask.completed) {
+		if (checkedTask.completed) {
 			this.setState({
 				toDoTasks: [
-					...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id), checkedTask
+					...this.state.toDoTasks.filter(
+						toDoTask => toDoTask.id !== id
+					),
+					checkedTask
 				]
 			});
 		} else {
 			this.setState({
-				toDoTasks: [checkedTask, ...this.state.toDoTasks.filter(toDoTask => toDoTask.id !== id)]
-			})
+				toDoTasks: [
+					checkedTask,
+					...this.state.toDoTasks.filter(
+						toDoTask => toDoTask.id !== id
+					)
+				]
+			});
 		}
-
 	};
 
 	confirmDelete = id => {
@@ -108,14 +114,6 @@ class App extends Component {
 
 	// Update
 	updateTaskHandler = id => {
-		if (
-			this.state.toDoTasks.find(toDoTask => toDoTask.id === id).completed
-		) {
-			this.setState({
-				showUpdateAlert: true
-			});
-		}
-
 		this.setState({
 			toDoInput: this.state.toDoTasks.find(toDoTask => toDoTask.id === id)
 				.task,
@@ -131,49 +129,52 @@ class App extends Component {
 		this.setState({ toDoInput: '', toDoUpdateId: -1 });
 	};
 
+	onResetTaskHandler = () => {
+		console.log('object');
+		this.setState({
+			toDoUpdateId: -1,
+			toDoInput: ''
+		});
+	};
+
 	render() {
 		return (
-			<div className='container mt-5'>
-				<ToDoInput
-					addToDoTask={this.addToDoTask}
-					onSubmit={this.onSubmitHandler}
-					toDoInput={this.state.toDoInput}
-					onChange={this.onChangeHandler}
-				/>
-				<ToDoTasks
-					toDoTasks={this.state.toDoTasks}
-					markComplete={this.markComplete}
-					deleteTask={this.confirmDelete}
-					updateTask={this.updateTaskHandler}
-				/>
+			<div>
+				<Header />
+				<div className='container mt-5'>
+					<ToDoInput
+						addToDoTask={this.addToDoTask}
+						onSubmit={this.onSubmitHandler}
+						toDoInput={this.state.toDoInput}
+						onChange={this.onChangeHandler}
+						toDoUpdateId={this.state.toDoUpdateId}
+					/>
+					<ToDoTasks
+						toDoTasks={this.state.toDoTasks}
+						markComplete={this.markComplete}
+						deleteTask={this.confirmDelete}
+						updateTask={this.updateTaskHandler}
+						toDoUpdateId={this.state.toDoUpdateId}
+						onResetTask={this.onResetTaskHandler}
+					/>
 
-				{this.state.showDeleteAlert ? (
-					<SweetAlert
-						warning
-						showCancel
-						confirmBtnText='Yes, delete it!'
-						confirmBtnBsStyle='danger'
-						cancelBtnBsStyle='default'
-						title='Are you sure?'
-						onConfirm={this.deleteTask}
-						onCancel={() => {
-							this.setState({ showDeleteAlert: false });
-						}}
-					>
-						You will not be able to recover this action!
-					</SweetAlert>
-				) : null}
-
-				{this.state.showUpdateAlert ? (
-					<SweetAlert
-						title='This task has already completed!'
-						onConfirm={() => {
-							this.setState({ showUpdateAlert: false });
-						}}
-					>
-						You can't update completed tasks
-					</SweetAlert>
-				) : null}
+					{this.state.showDeleteAlert ? (
+						<SweetAlert
+							warning
+							showCancel
+							confirmBtnText='Yes, delete it!'
+							confirmBtnBsStyle='danger'
+							cancelBtnBsStyle='default'
+							title='Are you sure?'
+							onConfirm={this.deleteTask}
+							onCancel={() => {
+								this.setState({ showDeleteAlert: false });
+							}}
+						>
+							You will not be able to recover this action!
+						</SweetAlert>
+					) : null}
+				</div>
 			</div>
 		);
 	}

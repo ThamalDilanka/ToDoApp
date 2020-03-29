@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { PlusCircle } from 'react-bootstrap-icons';
+import { PlusCircle, Bookmark } from 'react-bootstrap-icons';
+
 
 class ToDoInput extends Component {
 	
@@ -22,7 +23,10 @@ class ToDoInput extends Component {
 							className='btn btn-outline-primary'
 							type='submit'
 						>
-							<PlusCircle />
+							{
+								this.props.toDoUpdateId === -1 ? <PlusCircle /> : <Bookmark />
+							}
+							
 						</button>
 					</div>
 				</div>

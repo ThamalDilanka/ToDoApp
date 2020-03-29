@@ -17,6 +17,8 @@ class ToDoTasks extends Component {
 							markComplete={this.props.markComplete}
 							deleteTask={this.props.deleteTask}
 							updateTask={this.props.updateTask}
+							toDoUpdateId={this.props.toDoUpdateId}
+							onResetTask={this.props.onResetTask}
 						/>
 					))}
 				</tbody>
