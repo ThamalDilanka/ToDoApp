@@ -2,10 +2,12 @@
 	background-image: url(../assets/background.jpg);
 	background-position: center;
 	background-size: auto;
+	background-repeat: no-repeat;
 }
 
 .place-holder-container {
 	background-image: url(../assets/placeholder.jpg);
 	background-position: center;
 	background-size: cover;
+	background-repeat: no-repeat;
 }
